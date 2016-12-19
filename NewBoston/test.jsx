@@ -118,12 +118,14 @@ var Comment = React.createClass({
             this.setState({editing: true})
         },
         remove: function() {
-            alert('Removing comment');
+            console.log('Removing comment');
+            this.props.deleteFromBoard(this.props.index);
         },
 
         save: function() {
             var val = this.refs.newText.value;
             console.log('New text: ' + val);
+            this.props.updateCommentText(val, this.props.index);
             this.setState({editing: false})
         },
 
@@ -167,15 +169,45 @@ var Board = React.createClass({
         }
     },
 
+    addComment: function(text) {
+        var arr = this.state.comments;
+        arr.push(text);
+        this.setState({comments: arr});
+    },
+
+    removeComment: function(i) {
+        console.log('Removing comment: ' + i);
+        var arr = this.state.comments;
+        arr.splice(i, 1);
+        this.setState({comments: arr});
+    },
+
+    updateComment: function(newText, i) {
+        console.log('Updating comment: ' + i);
+        var arr = this.state.comments;
+        arr[i] = newText;
+        this.setState({comments: arr});
+    },
+
+    eachComment: function(text, i) {
+        return(
+            <Comment key={i} index={i} updateCommentText={this.updateComment} deleteFromBoard={this.removeComment}>
+                {text}
+            </Comment>
+        )
+    },
+
     render: function() {
         return (
-            <div className="board">
-                {
-                    this.state.comments.map(function(text, i) {
-                        return(<Comment key={i}>{text}</Comment>)
-                    })
-                }
+            <div>
+                <button onClick={this.addComment.bind(null, 'I am awesome')} className="button-info create">Add New Comment</button>
+                <div className="board">
+                    {
+                        this.state.comments.map(this.eachComment)
+                    }
+                </div>
             </div>
+
         )
     }
 
