@@ -200,7 +200,7 @@ var Board = React.createClass({
     render: function() {
         return (
             <div>
-                <button onClick={this.addComment.bind(null, 'I am awesome)} className="button-info create">Add New Comment</button>
+                <button onClick={this.addComment.bind(null, 'I am awesome')} className="button-info create">Add New Comment</button>
                 <div className="board">
                     {
                         this.state.comments.map(this.eachComment)
